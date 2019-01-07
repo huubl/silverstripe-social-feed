@@ -115,6 +115,9 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			break;
 		}
 		$result = $provider->getResponse($request);
+		
+		return $result['data'];
+		
 		$output = json_decode($result->getBody(), 1);
 
 		return $output['data'];
