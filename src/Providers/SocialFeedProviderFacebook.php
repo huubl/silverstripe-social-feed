@@ -79,12 +79,22 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 
 	public function getFeedUncached()
 	{
-		$provider = new Facebook([
+		$providerOptions = [
 			'clientId' => $this->FacebookAppID,
 			'clientSecret' => $this->FacebookAppSecret,
 			// https://github.com/thephpleague/oauth2-facebook#graph-api-version
 			'graphApiVersion' => 'v2.6'
-		]);
+		];
+
+
+		if (\SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY')) {
+			$providerOptions['proxy'] = sprintf('%s:%s', \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY_PORT'));
+		}
+
+
+    //	info($providerOptions);
+
+		$provider = new Facebook($providerOptions);
 
 		// For an App Access Token we can just use our App ID and App Secret pipped together
 		// https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
