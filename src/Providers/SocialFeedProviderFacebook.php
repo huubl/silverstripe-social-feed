@@ -85,7 +85,8 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			// https://github.com/thephpleague/oauth2-facebook#graph-api-version
 			'graphApiVersion' => 'v2.6'
 		];
-
+		
+		info(\SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), 'proxy');
 
 		if (\SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY')) {
 			$providerOptions['proxy'] = sprintf('%s:%s', \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY_PORT'));
