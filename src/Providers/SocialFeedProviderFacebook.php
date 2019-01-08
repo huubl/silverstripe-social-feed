@@ -91,7 +91,7 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 			$providerOptions['proxy'] = sprintf('%s:%s', \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY_PORT'));
 		}
 		
-		if (isset($_GET['feedtest']) {
+		if (isset($_GET['feedtest'])) {
 			info($providerOptions);
 			die;
 		}
