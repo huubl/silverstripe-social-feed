@@ -79,28 +79,29 @@ class SocialFeedProviderFacebook extends SocialFeedProvider implements SocialFee
 
 	public function getFeedUncached()
 	{
-		$providerOptions = [
-			'clientId' => $this->FacebookAppID,
-			'clientSecret' => $this->FacebookAppSecret,
-			// https://github.com/thephpleague/oauth2-facebook#graph-api-version
-			'graphApiVersion' => 'v2.6'
-		];
-		
-		info(\SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), 'proxy');
+		// temporary check to toggle setting the proxy on and off so we can see where we can make it work
+		if (isset($_GET['feedtest']) && $_GET['feedtest'] == 2) {
+			$proxy = null;
+			if (Environment::getEnv('SS_OUTBOUND_PROXY')) {
+			    $proxy = sprintf('%s:%s', Environment::getEnv('SS_OUTBOUND_PROXY'), Environment::getEnv('SS_OUTBOUND_PROXY_PORT'));
+			}
 
-		if (\SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY')) {
-			$providerOptions['proxy'] = sprintf('%s:%s', \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY'), \SilverStripe\Core\Environment::getEnv('SS_OUTBOUND_PROXY_PORT'));
+			$provider = new Facebook([
+			    'clientId' => $this->FacebookAppID,
+			    'clientSecret' => $this->FacebookAppSecret,
+			    // https://github.com/thephpleague/oauth2-facebook#graph-api-version [^]
+			    'graphApiVersion' => 'v2.6',
+			    'proxy' => $proxy
+			]);
+
+		} else {
+			$provider = new Facebook([
+			    'clientId' => $this->FacebookAppID,
+			    'clientSecret' => $this->FacebookAppSecret,
+			    // https://github.com/thephpleague/oauth2-facebook#graph-api-version [^]
+			    'graphApiVersion' => 'v2.6'
+			]);
 		}
-		
-		if (isset($_GET['feedtest'])) {
-			info($providerOptions);
-			die;
-		}
-
-
-    	
-
-		$provider = new Facebook($providerOptions);
 
 		// For an App Access Token we can just use our App ID and App Secret pipped together
 		// https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
